@@ -1,8 +1,8 @@
 # Tic Tac Toe Bot, a simple discord bot to play tic tac toe with another person on a discord server
 # Copyright (C) 2022  Antoine Meloche
 
+import os
 import discord
-import time
 
 class TicTacToe(discord.Client):
 
@@ -205,11 +205,16 @@ class TicTacToe(discord.Client):
             self.plays = 0
             self.win = False
 
-try:
-	with open("token.txt", "r") as f:
-		token = f.read()
-except Exception:
-	print("No `token.txt` file was found in current directory")
+is_heroku = os.environ.get('IS_HEROKU', None)
+
+if is_heroku:
+    token = os.environ.get('BOT_TOKEN')
+else:
+    try:
+        with open("token.txt", "r") as f:
+            token = f.read()
+    except Exception:
+        print("No `token.txt` file was found in current directory")
 
 client = TicTacToe()
 client.run(token)
